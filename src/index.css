@@ -1,0 +1,302 @@
+@import "tailwindcss";
+
+:root {
+  --font-cormorant: "Cormorant Garamond", "Georgia", serif;
+  --font-jost: "Jost", "Gill Sans", system-ui, sans-serif;
+}
+
+@theme {
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-jost);
+
+  --color-ivory: #f4efe4;
+  --color-paper: #faf6ec;
+  --color-cream: #efe7d6;
+  --color-ink: #1d1912;
+  --color-noir: #14110c;
+  --color-smoke: #6f6a5d;
+  --color-gold: #a68956;
+  --color-goldlight: #c9b184;
+  --color-sage: #5f6b55;
+  --color-leaf: #424e3a;
+  --color-rose: #c39f98;
+  --color-blush: #e8d8d2;
+
+  --animate-marquee: marquee 38s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-paper);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ivory);
+}
+::-webkit-scrollbar-thumb {
+  background: #b8ab8e;
+  border: 3px solid var(--color-ivory);
+  border-radius: 8px;
+}
+
+/* ---- film grain overlay ---- */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: -100%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 9s steps(8) infinite;
+}
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  12% { transform: translate(-4%, 3%); }
+  25% { transform: translate(3%, -5%); }
+  37% { transform: translate(-5%, -2%); }
+  50% { transform: translate(4%, 4%); }
+  62% { transform: translate(-3%, 5%); }
+  75% { transform: translate(5%, -3%); }
+  87% { transform: translate(-2%, 2%); }
+}
+
+/* ---- parisian arch mask ---- */
+.arch {
+  border-radius: 999px 999px 0 0;
+}
+.arch-soft {
+  border-radius: 160px 160px 0 0;
+}
+
+/* ---- typography helpers ---- */
+.label-caps {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.42em;
+  font-size: 0.68rem;
+  font-weight: 500;
+}
+
+.display-tight {
+  line-height: 0.94;
+  letter-spacing: -0.015em;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px rgba(29, 25, 18, 0.55);
+  color: transparent;
+}
+.text-stroke-light {
+  -webkit-text-stroke: 1px rgba(244, 239, 228, 0.6);
+  color: transparent;
+}
+
+/* ---- hairlines ---- */
+.hairline {
+  border-color: rgba(29, 25, 18, 0.16);
+}
+.hairline-light {
+  border-color: rgba(244, 239, 228, 0.18);
+}
+
+/* ---- scroll reveal ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(46px);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-inview {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-clip {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal-clip.is-inview {
+  clip-path: inset(0 0 0% 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-clip {
+    transition: none;
+    transform: none;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---- link underline flourish ---- */
+.link-flourish {
+  position: relative;
+}
+.link-flourish::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-flourish:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---- image zoom hover ---- */
+.zoom-img {
+  overflow: hidden;
+}
+.zoom-img img {
+  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1), filter 1.6s ease;
+}
+.zoom-img:hover img {
+  transform: scale(1.06);
+}
+
+/* ---- duotone photo treatment ---- */
+.photo-warm img {
+  filter: saturate(0.92) contrast(1.02) sepia(0.06);
+}
+
+/* ---- vertical text ---- */
+.rotate-180-v {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* ---- marquee pause on hover ---- */
+.marquee-paused:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---- фотографски голови на цветя с перавани ръбове ---- */
+.flower-cut {
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 55%,
+    rgba(0, 0, 0, 0.6) 72%,
+    transparent 94%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 55%,
+    rgba(0, 0, 0, 0.6) 72%,
+    transparent 94%
+  );
+  border-radius: 50%;
+  overflow: hidden;
+}
+.flower-cut-tall {
+  -webkit-mask-image: radial-gradient(
+    ellipse 46% 44% at 50% 52%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 70%,
+    transparent 93%
+  );
+  mask-image: radial-gradient(
+    ellipse 46% 44% at 50% 52%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 70%,
+    transparent 93%
+  );
+  border-radius: 46%;
+  overflow: hidden;
+}
+
+/* ---- form fields ---- */
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(29, 25, 18, 0.25);
+  padding: 0.85rem 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.4s ease;
+}
+.field::placeholder {
+  color: rgba(29, 25, 18, 0.4);
+  letter-spacing: 0.02em;
+}
+.field:focus {
+  border-color: var(--color-gold);
+}
+select.field {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* ---- map frame ---- */
+.map-mono {
+  filter: grayscale(1) sepia(0.28) contrast(0.95);
+  transition: filter 0.8s ease;
+}
+.map-mono:hover {
+  filter: grayscale(0) sepia(0);
+}
+
+/* ---- мобилно ---- */
+@media (max-width: 640px) {
+  /* полетата на формата без auto-zoom при фокус в iOS/Safari */
+  .field {
+    font-size: 16px;
+  }
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* по-големи тап-цели на телефон */
+@media (max-width: 640px) {
+  a,
+  button {
+    touch-action: manipulation;
+  }
+}
